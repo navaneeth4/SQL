@@ -23,7 +23,7 @@
             <td>{{this.email}}</td>
             <td>{{this.message}}</td>
             <td>
-            <form method="POST" action="/res/id?_method=DELETE">
+            <form action="/res/{{this.id}}?_method=DELETE" method="POST">
             <button onclick="return confirm('Are you sure you want to delete this?')">Delete</button> 
             </form>
             </td>
