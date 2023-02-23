@@ -67,6 +67,41 @@ app.delete('/res/:id', (req, res) => {
   })
 })
 
+app.get('/res/:id/edit', (req, res) => {
+  const id = req.params.id
+  sql.connect(dbconfig, (err) => {
+    if (err) throw err
+
+    const request = new sql.Request()
+
+    request.query(`SELECT * FROM test WHERE id=${id}`, (err, result) => {
+      if (err) throw err
+
+      res.render('edit', { data: result.recordset[0] })
+    })
+  })
+})
+
+app.put('/res/:id', (req, res) => {
+  const id = req.params.id
+  const { name, email, message } = req.body
+
+  sql.connect(dbconfig, (err) => {
+    if (err) throw err
+
+    const request = new sql.Request()
+
+    request.query(`UPDATE test SET name='${name}', email='${email}', message='${message}' WHERE id=${id}`, (err, result) => {
+      if (err) throw err
+
+      console.log('Updated')
+      res.redirect('/res')
+    })
+  })
+})
+
+
+
 
 app.listen(8000, () => {
     console.log('Server up')

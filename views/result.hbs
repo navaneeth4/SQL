@@ -12,6 +12,7 @@
           <th>Name</th>
           <th>Email</th>
           <th>Message</th>
+          <th>Update</th>
           <th>Delete</th>
         </tr>
       </thead>
@@ -23,11 +24,16 @@
             <td>{{this.email}}</td>
             <td>{{this.message}}</td>
             <td>
+            <form action="/res/{{this.id}}/edit" method="GET">
+            <button onclick="return confirm('Are you sure you want to edit this ?')">Edit</button>  
+            </form>
+            </td>
+            <td>
             <form action="/res/{{this.id}}?_method=DELETE" method="POST">
             <button onclick="return confirm('Are you sure you want to delete this?')">Delete</button> 
             </form>
             </td>
-          </tr>
+            </tr>
         {{/each}}
       </tbody>
     </table>
