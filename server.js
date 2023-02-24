@@ -20,6 +20,7 @@ app.post("/ind",(req,res)=>{
 
 
 app.post('/submit', (req, res) => {
+
   const {id, name, email, message } = req.body 
 
   sql.connect(dbconfig, (err) => {
@@ -36,7 +37,26 @@ app.post('/submit', (req, res) => {
   }) 
 }) 
 
+app.get('/sub',(req,res)=>{
+
+  sql.connect(dbconfig, (err) => {
+    if (err) throw err 
+
+    const request = new sql.Request() 
+
+    request.query(`select * from test`, (err, result) => {
+      if (err) throw err 
+
+      res.render('result', { data: result.recordset }) 
+    }) 
+  })
+})
+
+
+
+
 app.get('/res', (req, res) => {
+
   sql.connect(dbconfig, (err) => {
     if (err) throw err 
 
@@ -68,7 +88,9 @@ app.delete('/res/:id', (req, res) => {
 })
 
 app.get('/res/:id/edit', (req, res) => {
+  
   const id = req.params.id
+
   sql.connect(dbconfig, (err) => {
     if (err) throw err
 
@@ -99,9 +121,6 @@ app.put('/res/:id', (req, res) => {
     })
   })
 })
-
-
-
 
 app.listen(8000, () => {
     console.log('Server up')
