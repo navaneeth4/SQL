@@ -67,7 +67,7 @@ label{
 }
 input{
 	width: 60%;
-	height: 20px;
+	height: 30px;
 	background: #e0dede;
 	justify-content: center;
 	display: flex;
@@ -118,15 +118,21 @@ button:hover{
 #chk:checked ~ .signup label{
 	transform: scale(.6);
 }
-
-
+.hi {
+  position: fixed;
+  bottom: 50;
+  width: 100%;
+  text-align: center;
+}
 </style>
+
+
+
 <!DOCTYPE html>
-<html>
-  
+<html>  
 <head>
-  <div align>
-  {{#if error}}
+  <div class="hi">
+   {{#if error}}
    <div style="color: red;">{{error}}</div>
     {{/if}}
     {{#if success}}
@@ -147,6 +153,7 @@ button:hover{
 					<input type="text" name="Name" placeholder="Name" required="">
 					<input type="text" name="username" placeholder="Username" required="">
 					<input type="password" name="password" placeholder="Password" required="">
+					<input type="password" name="confirmPassword" placeholder="Confirm Password" required="">
 					<button>Sign up</button>
 				</form>
 			</div>

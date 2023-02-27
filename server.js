@@ -19,26 +19,54 @@ app.post("/ind",(req,res)=>{
 })
 
 
+// app.post("/register", (req, res) => {
+//   const { username, password , Name} = req.body 
+
+//   sql.connect(dbconfig, (err) => {
+//     if (err) console.log(err) 
+
+//     const request = new sql.Request() 
+
+//     request.query(
+//       `INSERT INTO users (username, password,Name) VALUES ('${username}', '${password}','${Name}')`,
+//       (err, result) => {
+//         if (err) console.log(err) 
+
+//         console.log(`User '${username}' registered successfully`) 
+//         res.render('index2', { success: "Done..Now log in." }) 
+
+//       }
+//     ) 
+//   }) 
+// }) 
+
 app.post("/register", (req, res) => {
-  const { username, password , Name} = req.body 
+  const { username, password, confirmPassword, Name } = req.body 
+
+  if (password !== confirmPassword) {
+    return res.render('index2', { error: "Passwords do not match" }) 
+  }
+
+  if (password.length < 8 || !/\d/.test(password) || !/[a-zA-Z]/.test(password)) {
+    return res.render('index2', { error: "Password must be at least 8 characters long and contain at least one letter and one number" }) 
+  }
 
   sql.connect(dbconfig, (err) => {
     if (err) console.log(err) 
 
     const request = new sql.Request() 
 
-    request.query(
-      `INSERT INTO users (username, password,Name) VALUES ('${username}', '${password}','${Name}')`,
-      (err, result) => {
+    request.query(`INSERT INTO users (username, password, name) VALUES ('${username}', '${password}', '${Name}')`,(err, result) => {
         if (err) console.log(err) 
 
         console.log(`User '${username}' registered successfully`) 
-        res.render('index2', { success: "Done..Now log in." });
+        res.render('index2', { success: "Successfully Registered! Now Login." }) 
 
       }
     ) 
   }) 
 }) 
+
 
 app.post("/login", (req, res) => {
   const { username, password } = req.body 
@@ -48,9 +76,8 @@ app.post("/login", (req, res) => {
 
     const request = new sql.Request() 
 
-    request.query(
-      `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`,
-      (err, result) => {
+    request.query(`SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`,(err, result) => {
+      
         if (err) console.log(err) 
 
         if (result.recordset.length > 0) {
