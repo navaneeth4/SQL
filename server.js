@@ -11,12 +11,60 @@ app.set('view engine','hbs')
 app.use(express.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
-    res.render('1')
+    res.render('index2')
   })
 
 app.post("/ind",(req,res)=>{
     res.render('index')
 })
+
+
+app.post("/register", (req, res) => {
+  const { username, password , Name} = req.body 
+
+  sql.connect(dbconfig, (err) => {
+    if (err) console.log(err) 
+
+    const request = new sql.Request() 
+
+    request.query(
+      `INSERT INTO users (username, password,Name) VALUES ('${username}', '${password}','${Name}')`,
+      (err, result) => {
+        if (err) console.log(err) 
+
+        console.log(`User '${username}' registered successfully`) 
+        res.render('index2', { success: "Done..Now log in." });
+
+      }
+    ) 
+  }) 
+}) 
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body 
+
+  sql.connect(dbconfig, (err) => {
+    if (err) console.log(err) 
+
+    const request = new sql.Request() 
+
+    request.query(
+      `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`,
+      (err, result) => {
+        if (err) console.log(err) 
+
+        if (result.recordset.length > 0) {
+          console.log(`User '${username}' logged in successfully`) 
+          res.render('1')
+        } else {
+          console.log(`Incorrect username or password`) 
+          res.send(`Incorrect username or password`) 
+        }
+      }
+    ) 
+  }) 
+}) 
+
 
 
 app.post('/submit', (req, res) => {
@@ -51,9 +99,6 @@ app.get('/sub',(req,res)=>{
     }) 
   })
 })
-
-
-
 
 app.get('/res', (req, res) => {
 
