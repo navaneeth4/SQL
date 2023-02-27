@@ -4,6 +4,7 @@ const hbs = require('hbs')
 const app=express()
 const methodOverride = require('method-override')
 
+
 const dbconfig=require('./db/db')
 app.use(methodOverride('_method'))
 app.set('view engine','hbs')
@@ -56,12 +57,11 @@ app.post("/register", (req, res) => {
 
     const request = new sql.Request() 
 
-    request.query(`INSERT INTO users (username, password, name) VALUES ('${username}', '${password}', '${Name}')`,(err, result) => {
+    request.query(`insert into users (username, password, name) values ('${username}', '${password}', '${Name}')`,(err, result) => {
         if (err) console.log(err) 
 
         console.log(`User '${username}' registered successfully`) 
         res.render('index2', { success: "Successfully Registered! Now Login." }) 
-
       }
     ) 
   }) 
@@ -76,8 +76,8 @@ app.post("/login", (req, res) => {
 
     const request = new sql.Request() 
 
-    request.query(`SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`,(err, result) => {
-      
+    request.query(`select * from users where username = '${username}' and password = '${password}'`,(err, result) => {
+
         if (err) console.log(err) 
 
         if (result.recordset.length > 0) {
@@ -85,7 +85,7 @@ app.post("/login", (req, res) => {
           res.render('1')
         } else {
           console.log(`Incorrect username or password`) 
-          res.send(`Incorrect username or password`) 
+         res.render('index2', { error:"Invalid Username or Password" }) 
         }
       }
     ) 
@@ -150,7 +150,7 @@ app.delete('/res/:id', (req, res) => {
 
     const request = new sql.Request()
 
-    request.query(`DELETE FROM test WHERE id=${id}`, (err, result) => {
+    request.query(`delete from test where id=${id}`, (err, result) => {
       if (err) throw err
 
       console.log('Deleted')
@@ -168,10 +168,11 @@ app.get('/res/:id/edit', (req, res) => {
 
     const request = new sql.Request()
 
-    request.query(`SELECT * FROM test WHERE id=${id}`, (err, result) => {
+    request.query(`select * from test where id=${id}`, (err, result) => {
       if (err) throw err
 
       res.render('edit', { data: result.recordset[0] })
+
     })
   })
 })
@@ -185,7 +186,7 @@ app.put('/res/:id', (req, res) => {
 
     const request = new sql.Request()
 
-    request.query(`UPDATE test SET name='${name}', email='${email}', message='${message}' WHERE id=${id}`, (err, result) => {
+    request.query(`update test set name='${name}', email='${email}', message='${message}' where id=${id}`, (err, result) => {
       if (err) throw err
 
       console.log('Updated')
